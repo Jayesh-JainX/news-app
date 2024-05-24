@@ -14,6 +14,8 @@ app.use(
   })
 );
 
+app.use(express.static(path.join(__dirname, "public")));
+
 app.get("/api/news", (req, res) => {
   const quer = req.query.quer;
   const apiKey = process.env.API_KEY;
