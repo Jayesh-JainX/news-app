@@ -10,7 +10,10 @@ const port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "https://online-news-app.vercel.app",
+    origin: [
+      "https://online-news-app.vercel.app",
+      "https://online-news-app.netlify.app",
+    ],
   })
 );
 
