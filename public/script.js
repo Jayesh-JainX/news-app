@@ -153,10 +153,18 @@ function getTargetTimeZone() {
 }
 
 async function fetchNews(quer) {
-  const res = await fetch(`/api/news?quer=${quer}`);
-  const data = await res.json();
-  timeZone = getTargetTimeZone();
-  bindData(data.articles);
+  showLoadingSpinner();
+  try {
+    const res = await fetch(`/api/news?quer=${quer}`);
+    const data = await res.json();
+    console.log("Fetched data:", data);
+    timeZone = getTargetTimeZone();
+    bindData(data.articles);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+  } finally {
+    hideLoadingSpinner();
+  }
 }
 
 function bindData(articles) {
@@ -166,7 +174,11 @@ function bindData(articles) {
   cardContainer.innerHTML = "";
 
   articles.forEach((article) => {
-    if (!article.urlToImage) return;
+    if (!article.urlToImage) {
+      console.log("No image URL found, setting default.");
+      article.urlToImage =
+        "http://127.0.0.1:5501/public/image/image-load-failed.png";
+    }
     const cardClone = newsCardTemplate.content.cloneNode(true);
     fillDataCard(cardClone, article);
     cardContainer.appendChild(cardClone);
@@ -192,7 +204,7 @@ function fillDataCard(cardClone, article) {
     timeZone,
   });
 
-  newsSource.innerHTML = `${article.source.name} . ${dat}`;
+  newsSource.innerHTML = `${article.author} . ${dat}`;
 
   cardClone.firstElementChild.addEventListener("click", () => {
     window.open(article.url, "_blank");
@@ -218,6 +230,14 @@ function onNavItemClick(id) {
   if (SearchInput.value !== "") {
     SearchInput.value = "";
   }
+}
+
+function showLoadingSpinner() {
+  document.getElementById("loading-spinner").style.display = "flex";
+}
+
+function hideLoadingSpinner() {
+  document.getElementById("loading-spinner").style.display = "none";
 }
 
 function onNavItemClick1(id) {
@@ -331,10 +351,17 @@ function viewmore() {
 }
 
 async function appendNews(quer) {
-  const res = await fetch(`/api/news?quer=${quer}`);
-  const data = await res.json();
-  timeZone = getTargetTimeZone();
-  bindappendData(data.articles);
+  showLoadingSpinner();
+  try {
+    const res = await fetch(`/api/news?quer=${quer}`);
+    const data = await res.json();
+    timeZone = getTargetTimeZone();
+    bindappendData(data.articles);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+  } finally {
+    hideLoadingSpinner();
+  }
 }
 
 function bindappendData(articles) {
@@ -342,7 +369,12 @@ function bindappendData(articles) {
   const newsCardTemplate = document.getElementById("template-news-card");
 
   articles.forEach((article) => {
-    if (!article.urlToImage) return;
+    if (!article.urlToImage) {
+      console.log("No image URL found, setting default.");
+      article.urlToImage =
+        "http://127.0.0.1:5501/public/image/image-load-failed.png";
+    }
+
     const cardClone = newsCardTemplate.content.cloneNode(true);
     fillDataCard(cardClone, article);
     cardContainer.appendChild(cardClone);
