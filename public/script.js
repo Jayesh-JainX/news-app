@@ -176,8 +176,7 @@ function bindData(articles) {
   articles.forEach((article) => {
     if (!article.urlToImage) {
       console.log("No image URL found, setting default.");
-      article.urlToImage =
-        "http://127.0.0.1:5501/public/image/image-load-failed.png";
+      article.urlToImage = "image/image-load-failed.png";
     }
     const cardClone = newsCardTemplate.content.cloneNode(true);
     fillDataCard(cardClone, article);
@@ -371,8 +370,7 @@ function bindappendData(articles) {
   articles.forEach((article) => {
     if (!article.urlToImage) {
       console.log("No image URL found, setting default.");
-      article.urlToImage =
-        "http://127.0.0.1:5501/public/image/image-load-failed.png";
+      article.urlToImage = "/image/image-load-failed.png";
     }
 
     const cardClone = newsCardTemplate.content.cloneNode(true);
