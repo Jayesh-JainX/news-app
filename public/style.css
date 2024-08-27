@@ -173,6 +173,15 @@ main {
   align-items: start;
 }
 
+@media only screen and (max-width: 376px) {
+  .card {
+    padding: 3%;
+  }
+  .card-header img {
+    border-radius: 4px;
+  }
+}
+
 .card {
   width: 360px;
   min-height: 400px;
@@ -320,7 +329,6 @@ main {
   font-size: 1.2em;
 }
 
-
 /* Style for the custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px; /* Width of the scrollbar */
@@ -346,7 +354,6 @@ body {
   scrollbar-width: thin; /* Thin scrollbar */
 }
 
-
 /* Loading Spinner Styles */
 .loading-spinner {
   position: fixed;
@@ -359,7 +366,7 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  display: none; 
+  display: none;
 }
 
 .spinner {
@@ -372,6 +379,10 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
