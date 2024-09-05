@@ -370,6 +370,10 @@ body {
 }
 
 .spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   border: 8px solid rgba(0, 0, 0, 0.1);
   border-left: 8px solid #ffffff;
   border-radius: 50%;
@@ -385,4 +389,21 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.no-news-message {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 1.5rem;
+  color: #555;
+
+  padding-top: 18vh;
+}
+
+.no-news-message img {
+  height: 20vh;
+  margin-bottom: 20px;
 }

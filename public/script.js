@@ -13,6 +13,9 @@ let data = {};
 let latitude = null;
 let longitude = null;
 
+let topresponse = false;
+let onNavresponse = false;
+
 function isAtBottom() {
   return window.innerHeight + window.scrollY >= document.body.offsetHeight;
 }
@@ -71,6 +74,7 @@ window.addEventListener("load", async () => {
         });
     });
 
+    topresponse = true;
     fetchNews(topheading + country);
   } else {
     console.warn("No internet connection available");
@@ -157,6 +161,29 @@ async function fetchNews(quer) {
   try {
     const res = await fetch(`/api/news?quer=${quer}`);
     const data = await res.json();
+    if (data.totalResults === 0 && quer.length >= 2) {
+      if (topresponse) {
+        prev_country = country;
+        country = "us";
+        fetchNews(topheading + country);
+        country = prev_country;
+        topresponse = false;
+      }
+
+      if (onNavresponse) {
+        quer = quer.slice(0, 22) + "us" + quer.slice(24);
+        encodeURIComponent(quer);
+        fetchNews(quer);
+
+        onNavresponse = false;
+      }
+    }
+    if (data.totalResults === 0) {
+      NoNews();
+    } else {
+      showNews();
+    }
+
     console.log("Fetched data:", data);
     timeZone = getTargetTimeZone();
     bindData(data.articles);
@@ -221,6 +248,7 @@ curSelectedNav1.classList.add("active");
 
 function onNavItemClick(id) {
   rid = id;
+  onNavresponse = true;
   fetchNews(topheading + country + category + id);
   const navItem = document.getElementById(id);
   curSelectedNav?.classList.remove("active");
@@ -229,6 +257,16 @@ function onNavItemClick(id) {
   if (SearchInput.value !== "") {
     SearchInput.value = "";
   }
+}
+
+function showNews() {
+  document.getElementById("no-news-message").style.display = "none";
+  document.getElementById("view-more").style.display = "flex";
+}
+
+function NoNews() {
+  document.getElementById("no-news-message").style.display = "flex";
+  document.getElementById("view-more").style.display = "none";
 }
 
 function showLoadingSpinner() {
@@ -241,6 +279,7 @@ function hideLoadingSpinner() {
 
 function onNavItemClick1(id) {
   rid = id;
+  onNavresponse = true;
   fetchNews(topheading + country + category + id);
   const navItem1 = document.getElementById(id + "m");
   curSelectedNav1?.classList.remove("active");
@@ -265,6 +304,7 @@ const SearchButton1 = document.getElementById("news-button1");
 SearchButton.addEventListener("click", () => {
   const list = SearchInput.value;
   rid = "Trending" + list;
+
   fetchNews(everything + list);
   curSelectedNav?.classList.remove("active");
   curSelectedNav = null;
